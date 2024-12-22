@@ -1,0 +1,11 @@
+nao:          -> n~ao
+:voce:        -> voc^e
+:comeco       -> come'co
+:ha:          -> h'a
+:acao:        -> a'c~ao
+:alteracao:   -> altera'c~ao
+:compilacao:  -> compila'c~ao
+:macacao:     -> macac~ao
+:macarrao:    -> macarr~ao
+:mantem:      -> mant'em
+:posicao:     -> posi'c~ao
