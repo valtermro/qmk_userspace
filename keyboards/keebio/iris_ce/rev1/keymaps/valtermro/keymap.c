@@ -46,10 +46,10 @@ enum custom_layer {
 
 #define __ KC_NO
 
-#define OSM_PNKY OSM(MOD_LGUI)
-#define OSM_RING OSM(MOD_LALT)
-#define OSM_MIDD OSM(MOD_LSFT)
-#define OSM_INDX OSM(MOD_LCTL)
+#define OSM_PNKY KC_LGUI // OSM(MOD_LGUI)
+#define OSM_RING KC_LALT // OSM(MOD_LALT)
+#define OSM_MIDD KC_LSFT // OSM(MOD_LSFT)
+#define OSM_INDX KC_LCTL // OSM(MOD_LCTL)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -57,7 +57,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //┌───────────┬───────────┬───────────┬───────────┬───────────┬───────────┐                      ┌───────────┬───────────┬───────────┬───────────┬───────────┬───────────┐
         KC_CAPS,    KC_1,       KC_2,       KC_3,       KC_4,       KC_5,                              KC_6,       KC_7,       KC_8,       KC_9,       KC_0,       KC_INS,
     //├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤                      ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
-        KC_DEL,     KC_Q,       KC_W,       KC_F,       KC_P,       KC_B,                              KC_J,       KC_L,       KC_U,       KC_Y,       KC_GRV,     KC_QUOT,
+        KC_DEL,     KC_Q,       KC_W,       KC_F,       KC_P,       KC_B,                              KC_J,       KC_L,       KC_U,       KC_Y,       ACC_TILD,   KC_QUOT,
     //├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤                      ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
         KC_ESC,     KC_A,       KC_R,       KC_S,       KC_T,       KC_G,                              KC_M,       KC_N,       KC_E,       KC_I,       KC_O,       KC_SCLN,
     //├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┼─────────┐  ┌─────────┼───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
@@ -71,27 +71,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //┌───────────┬───────────┬───────────┬───────────┬───────────┬───────────┐                      ┌───────────┬───────────┬───────────┬───────────┬───────────┬───────────┐
         KC_F6,      KC_F1,      KC_F2,      KC_F3,      KC_F4,      KC_F5,                             LGUI(KC_1), LGUI(KC_2), LGUI(KC_3), __,         DM_REC1,    DM_REC2,
     //├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤                      ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
-        KC_F12,     KC_F7,      KC_F8,      KC_F9,      KC_F10,     KC_F11,                            KC_PGUP,    KC_HOME,    KC_UP,      KC_END,     DM_PLY1,    DM_PLY2,
+        __,         KC_F7,      KC_F8,      KC_F9,      KC_F10,     KC_F11,                            KC_PGUP,    KC_HOME,    KC_UP,      KC_END,     DM_PLY1,    DM_PLY2,
     //├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤                      ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
-        __,         OSM_PNKY,   OSM_RING,   OSM_MIDD,   OSM_INDX,   KC_TAB,                            KC_PGDN,    KC_LEFT,    KC_DOWN,    KC_RIGHT,   KC_BSPC,    X_XDEL,
+        KC_F12,     OSM_PNKY,   OSM_RING,   OSM_MIDD,   OSM_INDX,   KC_TAB,                            KC_PGDN,    KC_LEFT,    KC_DOWN,    KC_RIGHT,   KC_BSPC,    X_XDEL,
     //├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┼─────────┐  ┌─────────┼───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
-        __,         LCTL(KC_Z), LCTL(KC_X), LCTL(KC_C), LCTL(KC_V), __,         QK_BOOT,     QK_BOOT,  __,         KC_ESC,     QK_AREP,    QK_REP,     KC_DEL,     __,
+        __,         C(KC_Z),    C(KC_X),    C(KC_C),    C(KC_V),    KC_ESC,     QK_BOOT,     QK_BOOT,  __,         C(KC_S),    QK_AREP,    QK_REP,     KC_DEL,     X_JOIN,
     //└───────────┴───────────┴───────────┴────┬──────┴────┬──────┴────┬──────┴────┬────┘  └───┬─────┴─────┬─────┴─────┬─────┴───────────┴───────────┴───────────┴───────────┘
-                                                 _______,    _______,    KC_LGUI,                KC_ENTER,   _______,    __
+                                                 _______,    _______,    __,                     KC_ENTER,   _______,    __
     //                                         └───────────┴───────────┴───────────┘           └───────────┴───────────┴───────────┘
     ),
 
     [_SYM] = LAYOUT(
     //┌───────────┬───────────┬───────────┬───────────┬───────────┬───────────┐                      ┌───────────┬───────────┬───────────┬───────────┬───────────┬───────────┐
-        __,         S(KC_1),    S(KC_2),    S(KC_3),    S(KC_4),    S(KC_5),                           S(KC_6),    S(KC_7),    S(KC_8),    S(KC_9),    S(KC_0),    __,
+        __,         __,         __,         __,         __,         __,                                SYM_CIRC,   KC_AMPR,    KC_ASTR,    KC_PIPE,    KC_BSLS,    __,
     //├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤                      ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
-        __,         __,         SYM_SQUOT,  SYM_DQUOT,  KC_DOLLAR,  KC_CIRC,                           KC_LT,      KC_MINS,     KC_EQL,    KC_PLUS,    KC_SLSH,    KC_ASTR,
+        __,         __,         KC_MINS,    KC_EQL,     KC_PLUS,    __,                                KC_EXLM,    KC_AT,      KC_HASH,    KC_DOLLAR,  KC_PERC,    SYM_ORDO,
     //├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤                      ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
-        __,         OSM_PNKY,   OSM_RING,   OSM_MIDD,   OSM_INDX,   KC_GRV,                            KC_GT,      KC_LPRN,    KC_LCBR,    KC_LBRC,    KC_PIPE,    KC_AMPR,
+        __,         __,         KC_LBRC,    KC_LCBR,    KC_LPRN,    KC_LABK,                                __,         OSM_INDX,   OSM_MIDD,   OSM_RING,   OSM_PNKY,   SYM_ORDA,
     //├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┼─────────┐  ┌─────────┼───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
-        __,         __,         __,         SYM_DGRE,   SYM_ORDA,   SYM_ORDO,   QK_BOOT,     QK_BOOT,  KC_EXLM,    KC_RPRN,    KC_RCBR,    KC_RBRC,    KC_BSLS,    KC_QUES,
+        __,         __,         KC_RBRC,    KC_RCBR,    KC_RPRN,    KC_RABK,         QK_BOOT,     QK_BOOT,  __,         SYM_DQUOT,  SYM_SQUOT,  KC_GRAVE,   __,         SYM_DGRE,
     //└───────────┴───────────┴───────────┴────┬──────┴────┬──────┴────┬──────┴────┬────┘  └───┬─────┴─────┬─────┴─────┬─────┴───────────┴───────────┴───────────┴───────────┘
-                                                 MO(_SET),   _______,    __,                     __,         _______,    __
+                                                 MO(_SET),   _______,    SYM_UNDS,               __,         _______,    __
     //                                         └───────────┴───────────┴───────────┘           └───────────┴───────────┴───────────┘
     ),
 

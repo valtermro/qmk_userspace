@@ -17,6 +17,7 @@ enum custom_keycodes {
 
     ACC_TILD,
 
+    SYM_CIRC,
     SYM_UNDS,
     SYM_SQUOT,
     SYM_DQUOT,
@@ -25,6 +26,7 @@ enum custom_keycodes {
     SYM_ORDA,
 
     X_XDEL,
+    X_JOIN,
 };
 
 #define SEND_ACCENTED(lower, upper)        \
@@ -136,6 +138,13 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
 
+        case SYM_CIRC: {
+            if (record->event.pressed) {
+                SEND_STRING("^ ");
+            }
+            return false;
+        }
+
         case ACC_TILD: {
             if (record->event.pressed) {
                 SEND_SHIFTED("~", "`");
@@ -166,20 +175,28 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
 
         case SYM_DGRE: {
             if (record->event.pressed) {
-                SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_7) SS_TAP(X_KP_6) SS_UP(X_LALT));
+                SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_7) SS_TAP(X_KP_6)));
             }
             return false;
         }
 
         case SYM_ORDO: {
             if (record->event.pressed) {
-                SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_8) SS_TAP(X_KP_6) SS_UP(X_LALT));
+                SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_8) SS_TAP(X_KP_6)));
             }
             return false;
         }
 
         case SYM_ORDA: {
             if (record->event.pressed) {
+                SEND_STRING(SS_LALT(SS_TAP(X_KP_0) SS_TAP(X_KP_1) SS_TAP(X_KP_7) SS_TAP(X_KP_0)));
+            }
+            return false;
+        }
+
+        case X_JOIN: {
+            if (record->event.pressed) {
+                SEND_STRING(SS_TAP(X_END) SS_LSFT(SS_TAP(X_DOWN) SS_TAP(X_HOME)) SS_TAP(X_SPACE));
             }
             return false;
         }
@@ -188,10 +205,10 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 if (get_mods() == MOD_BIT(KC_LCTL)) {
                     unregister_code(KC_LCTL);
-                    SEND_STRING(SS_TAP(X_HOME) SS_TAP(X_HOME) SS_DOWN(X_LSFT) SS_TAP(X_DOWN) SS_UP(X_LSFT) SS_TAP(X_DEL));
+                    SEND_STRING(SS_TAP(X_DOWN) SS_TAP(X_END) SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_UP) SS_TAP(X_END) SS_TAP(X_HOME)) SS_TAP(X_DEL));
                     register_code(KC_LCTL);
                 } else {
-                    SEND_STRING(SS_DOWN(X_LSFT) SS_TAP(X_END) SS_UP(X_LSFT) SS_TAP(X_DEL));
+                    SEND_STRING(SS_LSFT(SS_TAP(X_END)) SS_TAP(X_DEL));
                 }
             }
             return false;

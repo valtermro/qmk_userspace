@@ -4,7 +4,7 @@ void rgb_init(void) {
 }
 
 void rgb_update(uint8_t led_min, uint8_t led_max) {
-    uint8_t mods = get_mods() | get_oneshot_mods();
+    // uint8_t mods = get_mods() | get_oneshot_mods();
     bool has_caps_lock = host_keyboard_led_state().caps_lock;
 #   define HAS_MOD(m) (mods & MOD_BIT(m))
 
@@ -16,10 +16,10 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
                 continue;
             }
 
-#           define HRM_LGUI_INDICATOR 2
-#           define HRM_LALT_INDICATOR 3
-#           define HRM_LSFT_INDICATOR 5
-#           define HRM_LCTL_INDICATOR 6
+// #           define HRM_LGUI_INDICATOR 2
+// #           define HRM_LALT_INDICATOR 3
+// #           define HRM_LSFT_INDICATOR 5
+// #           define HRM_LCTL_INDICATOR 6
 #           define CAPS_INDICATOR 0
 #           define DM_REC_INDICATOR 33
 
@@ -27,13 +27,13 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
 #           define HUE_GREEN 85
 #           define HUE_YELLOW 43
 
-            if ((index == HRM_LALT_INDICATOR && HAS_MOD(KC_LALT)) ||
-                (index == HRM_LGUI_INDICATOR && HAS_MOD(KC_LGUI)) ||
-                (index == HRM_LSFT_INDICATOR && HAS_MOD(KC_LSFT)) ||
-                (index == HRM_LCTL_INDICATOR && HAS_MOD(KC_LCTL))
-            ) {
-                hsv.h = HUE_GREEN;
-            }
+            // if ((index == HRM_LALT_INDICATOR && HAS_MOD(KC_LALT)) ||
+            //     (index == HRM_LGUI_INDICATOR && HAS_MOD(KC_LGUI)) ||
+            //     (index == HRM_LSFT_INDICATOR && HAS_MOD(KC_LSFT)) ||
+            //     (index == HRM_LCTL_INDICATOR && HAS_MOD(KC_LCTL))
+            // ) {
+            //     hsv.h = HUE_GREEN;
+            // }
 
             if (index == CAPS_INDICATOR) {
                 if (global_state.has_caps_word)
