@@ -25,8 +25,12 @@ enum custom_keycodes {
     SYM_ORDO,
     SYM_ORDA,
 
-    X_XDEL,
-    X_JOIN,
+    C_XDEL,
+    C_JOIN,
+    C_MNAV,
+    C_USPC,
+    C_CTLK,
+    C_CTLM,
 };
 
 #define SEND_ACCENTED(lower, upper)        \
@@ -49,8 +53,6 @@ enum custom_keycodes {
 
 #define SEND_ALT_SEQUENCE(sequence)        \
    SEND_STRING(SS_LALT(sequence));
-
-bool has_dm_rec1 = false;
 
 bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -194,14 +196,16 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
 
-        case X_JOIN: {
+        case C_JOIN: {
             if (record->event.pressed) {
-                SEND_STRING(SS_TAP(X_END) SS_LSFT(SS_TAP(X_DOWN) SS_TAP(X_HOME)) SS_TAP(X_SPACE));
+                if (!get_mods()) {
+                    SEND_STRING(SS_TAP(X_END) SS_LSFT(SS_TAP(X_DOWN) SS_TAP(X_HOME)) SS_TAP(X_SPACE));
+                }
             }
             return false;
         }
 
-        case X_XDEL: {
+        case C_XDEL: {
             if (record->event.pressed) {
                 if (get_mods() == MOD_BIT(KC_LCTL)) {
                     unregister_code(KC_LCTL);
@@ -210,6 +214,74 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
                 } else {
                     SEND_STRING(SS_LSFT(SS_TAP(X_END)) SS_TAP(X_DEL));
                 }
+            }
+            return false;
+        }
+
+        case C_MNAV: {
+            if (record->event.pressed) {
+                if (get_mods() == MOD_BIT(KC_LCTL)) {
+                    SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_MINUS))));
+                } else {
+                    SEND_STRING(SS_LCTL(SS_TAP(X_MINUS)));
+                }
+            }
+            return false;
+        }
+
+        case KC_SPACE: {
+            if (global_state.has_undspc) {
+                if (record->event.pressed) {
+                    SEND_STRING("_");
+                }
+                return false;
+            }
+            return true;
+        }
+
+        case KC_ENTER:
+        case KC_LPRN: {
+            if (record->event.pressed) {
+                global_state.has_undspc = false;
+            }
+            return true;
+        }
+
+        case KC_A ... KC_Z: {
+            if (global_state.prefixed_ctl_key) {
+                if (record->event.pressed) {
+                    register_code(KC_LCTL);
+                } else {
+                    unregister_code(KC_LCTL);
+                    global_state.prefixed_ctl_key = 0;
+                }
+            }
+            return true;
+        }
+
+#       define SET_PREFIXED_CTL_KEY(_x, _kc)         \
+            {if (!global_state.prefixed_ctl_key) {   \
+                SEND_STRING(SS_LCTL(SS_TAP(_x)));    \
+                global_state.prefixed_ctl_key = _kc; \
+            }}
+
+        case C_CTLK: {
+            if (record->event.pressed) {
+                SET_PREFIXED_CTL_KEY(X_K, KC_K);
+            }
+            return false;
+        }
+
+        case C_CTLM: {
+            if (record->event.pressed) {
+                SET_PREFIXED_CTL_KEY(X_M, KC_M);
+            }
+            return false;
+        }
+
+        case C_USPC: {
+            if (record->event.pressed) {
+                global_state.has_undspc = !global_state.has_undspc;
             }
             return false;
         }

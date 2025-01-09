@@ -4,7 +4,7 @@ void rgb_init(void) {
 }
 
 void rgb_update(uint8_t led_min, uint8_t led_max) {
-    // uint8_t mods = get_mods() | get_oneshot_mods();
+    uint8_t mods = get_mods() | get_oneshot_mods();
     bool has_caps_lock = host_keyboard_led_state().caps_lock;
 #   define HAS_MOD(m) (mods & MOD_BIT(m))
 
@@ -16,28 +16,43 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
                 continue;
             }
 
-// #           define HRM_LGUI_INDICATOR 2
-// #           define HRM_LALT_INDICATOR 3
-// #           define HRM_LSFT_INDICATOR 5
-// #           define HRM_LCTL_INDICATOR 6
-#           define CAPS_INDICATOR 0
-#           define DM_REC_INDICATOR 33
+#           define HRM_LGUI_INDICATOR  2
+#           define HRM_LALT_INDICATOR  3
+#           define HRM_LSFT_INDICATOR  5
+#           define HRM_LCTL_INDICATOR  6
+#           define CAPS_INDICATOR      0
+#           define DM_REC_INDICATOR    33
 
             hsv_t hsv = { .h = 0, .s = 255, .v = 125 };
-#           define HUE_GREEN 85
-#           define HUE_YELLOW 43
+#           define HUE_BLUE      128
+#           define HUE_YELLOW    43
+#           define HUE_GREEN     85
+#           define HUE_MODIFIER  HUE_BLUE
 
-            // if ((index == HRM_LALT_INDICATOR && HAS_MOD(KC_LALT)) ||
-            //     (index == HRM_LGUI_INDICATOR && HAS_MOD(KC_LGUI)) ||
-            //     (index == HRM_LSFT_INDICATOR && HAS_MOD(KC_LSFT)) ||
-            //     (index == HRM_LCTL_INDICATOR && HAS_MOD(KC_LCTL))
-            // ) {
-            //     hsv.h = HUE_GREEN;
-            // }
+            if ((index == HRM_LALT_INDICATOR && HAS_MOD(KC_LALT)) ||
+                (index == HRM_LGUI_INDICATOR && HAS_MOD(KC_LGUI)) ||
+                (index == HRM_LSFT_INDICATOR && HAS_MOD(KC_LSFT)))
+            {
+                hsv.h = HUE_MODIFIER;
+            }
+            else if (index == HRM_LCTL_INDICATOR) {
+                switch (global_state.prefixed_ctl_key) {
+                    case KC_K:
+                        hsv.h = HUE_GREEN;
+                        break;
+                    case KC_M:
+                        hsv.h = HUE_YELLOW;
+                        break;
+                    default:
+                        if (HAS_MOD(KC_LCTL))
+                            hsv.h = HUE_MODIFIER;
+                        break;
+                }
+            }
 
             if (index == CAPS_INDICATOR) {
                 if (global_state.has_caps_word)
-                    hsv.h = HUE_GREEN;
+                    hsv.h = HUE_BLUE;
                 else if (has_caps_lock)
                     hsv.h = HUE_YELLOW;
             }
@@ -46,7 +61,7 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
                 if (global_state.is_recording_macro_2)
                     hsv.h = HUE_YELLOW;
                 else if (global_state.is_recording_macro_1)
-                    hsv.h = HUE_GREEN;
+                    hsv.h = HUE_BLUE;
             }
 
             if (hsv.h != 0) {
