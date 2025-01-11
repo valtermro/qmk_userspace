@@ -24,44 +24,41 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
 #           define DM_REC_INDICATOR    33
 
             hsv_t hsv = { .h = 0, .s = 255, .v = 125 };
-#           define HUE_BLUE      128
-#           define HUE_YELLOW    43
-#           define HUE_GREEN     85
-#           define HUE_MODIFIER  HUE_BLUE
+#           define HUE_INDICATOR  128 // Blue
+#           define HUE_ACTIVE_1   43  // Yellow
+#           define HUE_ACTIVE_2   85  // Green
 
             if ((index == HRM_LALT_INDICATOR && HAS_MOD(KC_LALT)) ||
                 (index == HRM_LGUI_INDICATOR && HAS_MOD(KC_LGUI)) ||
                 (index == HRM_LSFT_INDICATOR && HAS_MOD(KC_LSFT)))
             {
-                hsv.h = HUE_MODIFIER;
+                hsv.h = HUE_INDICATOR;
             }
             else if (index == HRM_LCTL_INDICATOR) {
                 switch (global_state.prefixed_ctl_key) {
                     case KC_K:
-                        hsv.h = HUE_GREEN;
+                        hsv.h = HUE_ACTIVE_2;
                         break;
                     case KC_M:
-                        hsv.h = HUE_YELLOW;
+                        hsv.h = HUE_ACTIVE_1;
                         break;
                     default:
                         if (HAS_MOD(KC_LCTL))
-                            hsv.h = HUE_MODIFIER;
+                            hsv.h = HUE_INDICATOR;
                         break;
                 }
             }
-
-            if (index == CAPS_INDICATOR) {
+            else if (index == CAPS_INDICATOR) {
                 if (global_state.has_caps_word)
-                    hsv.h = HUE_BLUE;
+                    hsv.h = HUE_INDICATOR;
                 else if (has_caps_lock)
-                    hsv.h = HUE_YELLOW;
+                    hsv.h = HUE_ACTIVE_1;
             }
-
-            if (index == DM_REC_INDICATOR) {
+            else if (index == DM_REC_INDICATOR) {
                 if (global_state.is_recording_macro_2)
-                    hsv.h = HUE_YELLOW;
+                    hsv.h = HUE_ACTIVE_1;
                 else if (global_state.is_recording_macro_1)
-                    hsv.h = HUE_BLUE;
+                    hsv.h = HUE_INDICATOR;
             }
 
             if (hsv.h != 0) {

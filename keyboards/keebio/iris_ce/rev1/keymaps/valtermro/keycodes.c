@@ -25,13 +25,33 @@ enum custom_keycodes {
     SYM_ORDO,
     SYM_ORDA,
 
-    C_XDEL,
+    C_DELINE,
+    C_YANK,
+    C_DELEND,
     C_JOIN,
+    C_UNREDO,
     C_MNAV,
     C_USPC,
     C_CTLK,
     C_CTLM,
 };
+
+#define HAS_LCTL(a, b) ((a) & MOD_BIT(KC_LCTL) || (b) & MOD_BIT(KC_LCTL))
+#define HAS_LSFT(a, b) ((a) & MOD_BIT(KC_LSFT) || (b) & MOD_BIT(KC_LSFT))
+
+#define CLEAR_MODS(mods, osms) \
+    {if (mods) {               \
+        clear_mods();          \
+    } else if (osms) {         \
+        clear_oneshot_mods();  \
+    }}
+
+#define SET_MODS(mods, osms)    \
+    {if (mods) {                \
+        set_mods(mods);         \
+    } else if (osms) {          \
+        set_oneshot_mods(osms); \
+    }}
 
 #define SEND_ACCENTED(lower, upper)        \
     {if (get_mods() == MOD_BIT(KC_LSFT)) { \
@@ -197,33 +217,71 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
         }
 
         case C_JOIN: {
-            if (record->event.pressed) {
-                if (!get_mods()) {
-                    SEND_STRING(SS_TAP(X_END) SS_LSFT(SS_TAP(X_DOWN) SS_TAP(X_HOME)) SS_TAP(X_SPACE));
-                }
+            if (record->event.pressed && !get_mods() && !get_oneshot_mods()) {
+                SEND_STRING(SS_TAP(X_END) SS_LSFT(SS_TAP(X_DOWN) SS_TAP(X_HOME)) SS_TAP(X_SPACE));
             }
             return false;
         }
 
-        case C_XDEL: {
-            if (record->event.pressed) {
-                if (get_mods() == MOD_BIT(KC_LCTL)) {
-                    unregister_code(KC_LCTL);
-                    SEND_STRING(SS_TAP(X_DOWN) SS_TAP(X_END) SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_UP) SS_TAP(X_END) SS_TAP(X_HOME)) SS_TAP(X_DEL));
-                    register_code(KC_LCTL);
-                } else {
-                    SEND_STRING(SS_LSFT(SS_TAP(X_END)) SS_TAP(X_DEL));
-                }
+#       define SEND_DELETE_LINE() (SEND_STRING(SS_TAP(X_END) SS_TAP(X_HOME) SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_END)) SS_TAP(X_DEL) SS_TAP(X_DEL) SS_TAP(X_HOME)));
+
+        case C_DELINE: {
+            if (record->event.pressed && !get_mods() && !get_oneshot_mods()) {
+                SEND_DELETE_LINE();
+            }
+            return false;
+        }
+
+        case C_DELEND: {
+            if (record->event.pressed && !get_mods() && !get_oneshot_mods()) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_END)) SS_TAP(X_DEL));
             }
             return false;
         }
 
         case C_MNAV: {
             if (record->event.pressed) {
-                if (get_mods() == MOD_BIT(KC_LCTL)) {
+                uint8_t mods = get_mods();
+                uint8_t osms = get_oneshot_mods();
+
+                if (HAS_LCTL(mods, osms) || HAS_LSFT(mods, osms)) {
+                    CLEAR_MODS(mods, osms);
                     SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_MINUS))));
+                    SET_MODS(mods, 0);
                 } else {
                     SEND_STRING(SS_LCTL(SS_TAP(X_MINUS)));
+                }
+            }
+            return false;
+        }
+
+        case C_YANK: {
+            if (record->event.pressed) {
+                uint8_t mods = get_mods();
+                uint8_t osms = get_oneshot_mods();
+
+                if (HAS_LCTL(mods, osms) || HAS_LSFT(mods, osms)) {
+                    CLEAR_MODS(mods, osms);
+                    SEND_DELETE_LINE();
+                    SET_MODS(mods, 0);
+                } else {
+                    SEND_STRING(SS_LCTL(SS_TAP(X_X)));
+                }
+            }
+            return false;
+        }
+
+        case C_UNREDO: {
+            if (record->event.pressed) {
+                uint8_t mods = get_mods();
+                uint8_t osms = get_oneshot_mods();
+
+                if (HAS_LCTL(mods, osms) || HAS_LSFT(mods, osms)) {
+                    CLEAR_MODS(mods, osms);
+                    SEND_STRING(SS_LCTL(SS_TAP(X_Y)));
+                    SET_MODS(mods, osms);
+                } else {
+                    SEND_STRING(SS_LCTL(SS_TAP(X_Z)));
                 }
             }
             return false;
