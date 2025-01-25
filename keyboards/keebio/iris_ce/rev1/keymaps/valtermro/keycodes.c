@@ -15,25 +15,23 @@ enum custom_keycodes {
 
     A_GRAVE,
 
-    ACC_TILD,
-
     SYM_CIRC,
-    SYM_UNDS,
     SYM_SQUOT,
     SYM_DQUOT,
+    SYM_GRAVE,
     SYM_DGRE,
     SYM_ORDO,
     SYM_ORDA,
 
     C_DELINE,
-    C_YANK,
     C_DELEND,
     C_JOIN,
-    C_UNREDO,
     C_MNAV,
     C_USPC,
     C_CTLK,
     C_CTLM,
+    C_CTLR,
+    C_CTLU,
 };
 
 #define HAS_LCTL(a, b) ((a) & MOD_BIT(KC_LCTL) || (b) & MOD_BIT(KC_LCTL))
@@ -167,20 +165,6 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
 
-        case ACC_TILD: {
-            if (record->event.pressed) {
-                SEND_SHIFTED("~", "`");
-            }
-            return false;
-        }
-
-        case SYM_UNDS: {
-            if (record->event.pressed) {
-                SEND_SHIFTED("_", "-");
-            }
-            return false;
-        }
-
         case SYM_SQUOT: {
             if (record->event.pressed) {
                 SEND_STRING("' ");
@@ -191,6 +175,20 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
         case SYM_DQUOT: {
             if (record->event.pressed) {
                 SEND_STRING("\" ");
+            }
+            return false;
+        }
+
+        case SYM_GRAVE: {
+            if (record->event.pressed) {
+                uint8_t mods = get_mods();
+                uint8_t osms = get_oneshot_mods();
+
+                if (HAS_LCTL(mods, osms)) {
+                    SEND_STRING("`");
+                } else {
+                    SEND_STRING("` ");
+                }
             }
             return false;
         }
@@ -255,38 +253,6 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
 
-        case C_YANK: {
-            if (record->event.pressed) {
-                uint8_t mods = get_mods();
-                uint8_t osms = get_oneshot_mods();
-
-                if (HAS_LCTL(mods, osms) || HAS_LSFT(mods, osms)) {
-                    CLEAR_MODS(mods, osms);
-                    SEND_DELETE_LINE();
-                    SET_MODS(mods, 0);
-                } else {
-                    SEND_STRING(SS_LCTL(SS_TAP(X_X)));
-                }
-            }
-            return false;
-        }
-
-        case C_UNREDO: {
-            if (record->event.pressed) {
-                uint8_t mods = get_mods();
-                uint8_t osms = get_oneshot_mods();
-
-                if (HAS_LCTL(mods, osms) || HAS_LSFT(mods, osms)) {
-                    CLEAR_MODS(mods, osms);
-                    SEND_STRING(SS_LCTL(SS_TAP(X_Y)));
-                    SET_MODS(mods, osms);
-                } else {
-                    SEND_STRING(SS_LCTL(SS_TAP(X_Z)));
-                }
-            }
-            return false;
-        }
-
         case KC_SPACE: {
             if (global_state.has_undspc) {
                 if (record->event.pressed) {
@@ -333,6 +299,20 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
         case C_CTLM: {
             if (record->event.pressed) {
                 SET_PREFIXED_CTL_KEY(X_M, KC_M);
+            }
+            return false;
+        }
+
+        case C_CTLR: {
+            if (record->event.pressed) {
+                SET_PREFIXED_CTL_KEY(X_R, KC_R);
+            }
+            return false;
+        }
+
+        case C_CTLU: {
+            if (record->event.pressed) {
+                SET_PREFIXED_CTL_KEY(X_U, KC_U);
             }
             return false;
         }

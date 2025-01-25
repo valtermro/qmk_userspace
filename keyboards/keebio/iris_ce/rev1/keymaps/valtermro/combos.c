@@ -1,16 +1,29 @@
-//const uint16_t PROGMEM combo_r1[] = {KC_6,     KC_J,     COMBO_END};
-//const uint16_t PROGMEM combo_r2[] = {KC_7,     KC_L,     COMBO_END};
-//const uint16_t PROGMEM combo_r3[] = {KC_8,     KC_U,     COMBO_END};
-//const uint16_t PROGMEM combo_r4[] = {KC_9,     KC_Y,     COMBO_END};
-const uint16_t PROGMEM combo_unds[]  = {KC_J,     KC_M,     COMBO_END};
-const uint16_t PROGMEM combo_enter[] = {KC_L,     KC_N,     COMBO_END};
-const uint16_t PROGMEM combo_tab[]   = {KC_U,     KC_E,     COMBO_END};
-const uint16_t PROGMEM combo_bspc[]  = {KC_Y,     KC_I,     COMBO_END};
-//const uint16_t PROGMEM combo_esc[]   = {KC_Q,     KC_A,     COMBO_END};
+#if defined(COMBO_ENABLE)
+
+const uint16_t PROGMEM combo_g1[] = {KC_1, KC_Q,     COMBO_END};
+const uint16_t PROGMEM combo_g2[] = {KC_2, KC_W,     COMBO_END};
+const uint16_t PROGMEM combo_g3[] = {KC_3, KC_F,     COMBO_END};
+const uint16_t PROGMEM combo_g4[] = {KC_4, KC_P,     COMBO_END};
+const uint16_t PROGMEM combo_g5[] = {KC_5, KC_B,     COMBO_END};
+
+const uint16_t PROGMEM combo_c1[] = {KC_6, KC_J,     COMBO_END};
+const uint16_t PROGMEM combo_c2[] = {KC_7, KC_L,     COMBO_END};
+const uint16_t PROGMEM combo_c3[] = {KC_8, KC_U,     COMBO_END};
+const uint16_t PROGMEM combo_c4[] = {KC_9, KC_Y,     COMBO_END};
+const uint16_t PROGMEM combo_c5[] = {KC_0, KC_GRAVE, COMBO_END};
 
 combo_t key_combos[] = {
-    COMBO(combo_enter, KC_ENTER),
-    COMBO(combo_bspc,  KC_BSPC),
-    COMBO(combo_tab,   KC_TAB),
-    COMBO(combo_unds,  KC_UNDS),
+    COMBO(combo_g1, LGUI(KC_1)),
+    COMBO(combo_g2, LGUI(KC_2)),
+    COMBO(combo_g3, LGUI(KC_3)),
+    COMBO(combo_g4, LGUI(KC_4)),
+    COMBO(combo_g5, LGUI(KC_5)),
+
+    COMBO(combo_c1, LCTL(KC_1)),
+    COMBO(combo_c2, LCTL(KC_2)),
+    COMBO(combo_c3, LCTL(KC_3)),
+    COMBO(combo_c4, LCTL(KC_4)),
+    COMBO(combo_c5, LCTL(KC_5)),
 };
+
+#endif

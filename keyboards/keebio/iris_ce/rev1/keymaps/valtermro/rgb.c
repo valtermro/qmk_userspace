@@ -27,6 +27,8 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
 #           define HUE_INDICATOR  128 // Blue
 #           define HUE_ACTIVE_1   43  // Yellow
 #           define HUE_ACTIVE_2   85  // Green
+#           define HUE_ACTIVE_3   1   // Red
+#           define HUE_ACTIVE_4   191 // Purple
 
             if ((index == HRM_LALT_INDICATOR && HAS_MOD(KC_LALT)) ||
                 (index == HRM_LGUI_INDICATOR && HAS_MOD(KC_LGUI)) ||
@@ -41,6 +43,12 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
                         break;
                     case KC_M:
                         hsv.h = HUE_ACTIVE_1;
+                        break;
+                    case KC_R:
+                        hsv.h = HUE_ACTIVE_3;
+                        break;
+                    case KC_U:
+                        hsv.h = HUE_ACTIVE_4;
                         break;
                     default:
                         if (HAS_MOD(KC_LCTL))
