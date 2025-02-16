@@ -24,6 +24,8 @@ enum custom_keycodes {
     SYM_ORDA,
     SYM_SLASH,
 
+    C_COPY,
+
     C_DELINE,
     C_DELEND,
     C_JOIN,
@@ -225,6 +227,15 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
         case SYM_SLASH: {
             if (record->event.pressed) {
                 SEND_ALT_SEQUENCE(SS_TAP(X_P4) SS_TAP(X_P7));
+            }
+            return false;
+        }
+
+        case C_COPY: {
+            if (record->event.pressed) {
+                clear_mods();
+                clear_oneshot_mods();
+                SEND_STRING(SS_LCTL(SS_TAP(X_C)));
             }
             return false;
         }
