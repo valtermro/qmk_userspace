@@ -290,48 +290,55 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
             return true;
         }
 
+#       define CLEAR_PREFIXED_CTL_KEY()             \
+            {if (global_state.prefixed_ctl_key) {   \
+                unregister_code(KC_LCTL);           \
+                global_state.prefixed_ctl_key = 0;  \
+            }}
+
+#       define SEND_PREFIXED_CTL_KEY(_x, _kc)                   \
+            {if (!global_state.prefixed_ctl_key) {             \
+                SEND_STRING(SS_LCTL(SS_TAP(_x)));              \
+                global_state.prefixed_ctl_key = _kc;           \
+            } else if (global_state.prefixed_ctl_key == _kc) { \
+                CLEAR_PREFIXED_CTL_KEY();                      \
+            }}
+
         case KC_A ... KC_Z: {
             if (global_state.prefixed_ctl_key) {
                 if (record->event.pressed) {
                     register_code(KC_LCTL);
                 } else {
-                    unregister_code(KC_LCTL);
-                    global_state.prefixed_ctl_key = 0;
+                    CLEAR_PREFIXED_CTL_KEY();
                 }
             }
             return true;
         }
 
-#       define SET_PREFIXED_CTL_KEY(_x, _kc)         \
-            {if (!global_state.prefixed_ctl_key) {   \
-                SEND_STRING(SS_LCTL(SS_TAP(_x)));    \
-                global_state.prefixed_ctl_key = _kc; \
-            }}
-
         case C_CTLK: {
             if (record->event.pressed) {
-                SET_PREFIXED_CTL_KEY(X_K, KC_K);
+                SEND_PREFIXED_CTL_KEY(X_K, KC_K);
             }
             return false;
         }
 
         case C_CTLM: {
             if (record->event.pressed) {
-                SET_PREFIXED_CTL_KEY(X_M, KC_M);
+                SEND_PREFIXED_CTL_KEY(X_M, KC_M);
             }
             return false;
         }
 
         case C_CTLR: {
             if (record->event.pressed) {
-                SET_PREFIXED_CTL_KEY(X_R, KC_R);
+                SEND_PREFIXED_CTL_KEY(X_R, KC_R);
             }
             return false;
         }
 
         case C_CTLU: {
             if (record->event.pressed) {
-                SET_PREFIXED_CTL_KEY(X_U, KC_U);
+                SEND_PREFIXED_CTL_KEY(X_U, KC_U);
             }
             return false;
         }
