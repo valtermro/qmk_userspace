@@ -1,6 +1,6 @@
 void rgb_init(void) {
     rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-    rgb_matrix_sethsv_noeeprom(0, 0, 25);
+    rgb_matrix_sethsv_noeeprom(0, 0, 1);
 }
 
 void rgb_update(uint8_t led_min, uint8_t led_max) {
