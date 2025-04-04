@@ -35,6 +35,10 @@ enum custom_keycodes {
     C_CTLM,
     C_CTLR,
     C_CTLU,
+
+    M_EMAIL1,
+    M_EMAIL2,
+    M_EMAIL3,
 };
 
 #define HAS_LCTL(a, b) ((a) & MOD_BIT(KC_LCTL) || (b) & MOD_BIT(KC_LCTL))
@@ -71,9 +75,6 @@ enum custom_keycodes {
     } else {                               \
         SEND_STRING(regular);              \
     }}
-
-#define SEND_ALT_SEQUENCE(sequence)        \
-   SEND_STRING(SS_LALT(sequence));
 
 bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -226,7 +227,7 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
 
         case SYM_SLASH: {
             if (record->event.pressed) {
-                SEND_ALT_SEQUENCE(SS_TAP(X_P4) SS_TAP(X_P7));
+                SEND_STRING(SS_LALT(SS_TAP(X_P4)SS_TAP(X_P7)));
             }
             return false;
         }
@@ -346,6 +347,27 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
         case C_USPC: {
             if (record->event.pressed) {
                 global_state.has_undspc = !global_state.has_undspc;
+            }
+            return false;
+        }
+
+        case M_EMAIL1: {
+            if (record->event.pressed) {
+                SEND_STRING("valtermro@outlook.com");
+            }
+            return false;
+        }
+
+        case M_EMAIL2: {
+            if (record->event.pressed) {
+                SEND_STRING("valtermro@hotmail.com");
+            }
+            return false;
+        }
+
+        case M_EMAIL3: {
+            if (record->event.pressed) {
+                SEND_STRING("valter.rodrigues@softplan.com.br");
             }
             return false;
         }
