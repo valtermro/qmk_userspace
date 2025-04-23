@@ -18,6 +18,7 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
 
 #           define HRM_LGUI_INDICATOR  2
 #           define HRM_LALT_INDICATOR  3
+#           define HRM_RALT_INDICATOR  3
 #           define HRM_LSFT_INDICATOR  5
 #           define HRM_LCTL_INDICATOR  6
 #           define CAPS_INDICATOR      0
@@ -25,6 +26,7 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
 
             hsv_t hsv = { .h = 0, .s = 255, .v = 125 };
 #           define HUE_INDICATOR  128 // Blue
+#           define HUE_INDICATOR2 191 // Purple
 #           define HUE_ACTIVE_1   43  // Yellow
 #           define HUE_ACTIVE_2   85  // Green
 #           define HUE_ACTIVE_3   1   // Red
@@ -35,6 +37,10 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
                 (index == HRM_LSFT_INDICATOR && HAS_MOD(KC_LSFT)))
             {
                 hsv.h = HUE_INDICATOR;
+            }
+            else if ((index == HRM_RALT_INDICATOR && HAS_MOD(KC_RALT)))
+            {
+                hsv.h = HUE_INDICATOR2;
             }
             else if (index == HRM_LCTL_INDICATOR) {
                 switch (global_state.prefixed_ctl_key) {
