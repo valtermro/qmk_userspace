@@ -36,6 +36,8 @@ enum custom_keycodes {
     C_CTLR,
     C_CTLU,
 
+    C_COSM,
+
     M_EMAIL1,
     M_EMAIL2,
     M_EMAIL3,
@@ -347,6 +349,13 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
         case C_USPC: {
             if (record->event.pressed) {
                 global_state.has_undspc = !global_state.has_undspc;
+            }
+            return false;
+        }
+
+        case C_COSM: {
+            if (record->event.pressed) {
+                clear_oneshot_mods();
             }
             return false;
         }
