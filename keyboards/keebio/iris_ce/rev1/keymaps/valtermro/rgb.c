@@ -47,15 +47,6 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
                     case KC_K:
                         hsv.h = HUE_ACTIVE_2;
                         break;
-                    case KC_M:
-                        hsv.h = HUE_ACTIVE_1;
-                        break;
-                    case KC_R:
-                        hsv.h = HUE_ACTIVE_3;
-                        break;
-                    case KC_U:
-                        hsv.h = HUE_ACTIVE_4;
-                        break;
                     default:
                         if (HAS_MOD(KC_LCTL))
                             hsv.h = HUE_INDICATOR;

@@ -1,5 +1,5 @@
 enum custom_keycodes {
-    A_ACCUTE = QK_KB_0, // For regular QMK this should be SAFE_RANGE,
+    A_ACCUTE = SAFE_RANGE,
     E_ACCUTE,
     I_ACCUTE,
     O_ACCUTE,
@@ -32,9 +32,6 @@ enum custom_keycodes {
     C_MNAV,
     C_USPC,
     C_CTLK,
-    C_CTLM,
-    C_CTLR,
-    C_CTLU,
 
     C_COSM,
 
@@ -222,7 +219,7 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
 
         case C_JOIN: {
             if (record->event.pressed && !get_mods() && !get_oneshot_mods()) {
-                SEND_STRING(SS_TAP(X_END) SS_LSFT(SS_TAP(X_DOWN) SS_TAP(X_HOME)) SS_TAP(X_SPACE));
+                SEND_STRING(SS_TAP(X_END) SS_LSFT(SS_TAP(X_DOWN) SS_TAP(X_END) SS_TAP(X_HOME)) SS_TAP(X_SPACE));
             }
             return false;
         }
@@ -243,11 +240,9 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
 
-#       define SEND_DELETE_LINE() (SEND_STRING(SS_TAP(X_END) SS_TAP(X_HOME) SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_END)) SS_TAP(X_DEL) SS_TAP(X_DEL) SS_TAP(X_HOME)));
-
         case C_DELINE: {
             if (record->event.pressed && !get_mods() && !get_oneshot_mods()) {
-                SEND_DELETE_LINE();
+                SEND_STRING(SS_TAP(X_END) SS_TAP(X_HOME) SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_DOWN)) SS_TAP(X_DEL) SS_TAP(X_HOME));
             }
             return false;
         }
@@ -321,27 +316,6 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
         case C_CTLK: {
             if (record->event.pressed) {
                 SEND_PREFIXED_CTL_KEY(X_K, KC_K);
-            }
-            return false;
-        }
-
-        case C_CTLM: {
-            if (record->event.pressed) {
-                SEND_PREFIXED_CTL_KEY(X_M, KC_M);
-            }
-            return false;
-        }
-
-        case C_CTLR: {
-            if (record->event.pressed) {
-                SEND_PREFIXED_CTL_KEY(X_R, KC_R);
-            }
-            return false;
-        }
-
-        case C_CTLU: {
-            if (record->event.pressed) {
-                SEND_PREFIXED_CTL_KEY(X_U, KC_U);
             }
             return false;
         }
