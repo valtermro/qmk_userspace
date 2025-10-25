@@ -22,7 +22,7 @@ enum custom_keycodes {
     SYM_DGRE,
     SYM_ORDO,
     SYM_ORDA,
-    SYM_SLASH,
+    SYM_TILDE,
 
     C_COPY,
 
@@ -217,16 +217,23 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
 
-        case C_JOIN: {
-            if (record->event.pressed && !get_mods() && !get_oneshot_mods()) {
-                SEND_STRING(SS_TAP(X_END) SS_LSFT(SS_TAP(X_DOWN) SS_TAP(X_END) SS_TAP(X_HOME)) SS_TAP(X_SPACE));
+        case SYM_TILDE: {
+            if (record->event.pressed) {
+                uint8_t mods = get_mods();
+                uint8_t osms = get_oneshot_mods();
+
+                if (HAS_LCTL(mods, osms)) {
+                    SEND_STRING("~");
+                } else {
+                    SEND_STRING("~ ");
+                }
             }
             return false;
         }
 
-        case SYM_SLASH: {
-            if (record->event.pressed) {
-                SEND_STRING(SS_LALT(SS_TAP(X_P4)SS_TAP(X_P7)));
+        case C_JOIN: {
+            if (record->event.pressed && !get_mods() && !get_oneshot_mods()) {
+                SEND_STRING(SS_TAP(X_END) SS_LSFT(SS_TAP(X_DOWN) SS_TAP(X_END) SS_TAP(X_HOME)) SS_TAP(X_SPACE));
             }
             return false;
         }
