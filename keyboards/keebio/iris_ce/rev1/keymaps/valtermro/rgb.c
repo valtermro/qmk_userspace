@@ -1,9 +1,10 @@
 void rgb_init(void) {
     rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-    rgb_matrix_sethsv_noeeprom(0, 0, 1);
+    rgb_matrix_sethsv_noeeprom(0, 0, 0);
 }
 
 void rgb_update(uint8_t led_min, uint8_t led_max) {
+#if false
     uint8_t mods = get_mods() | get_oneshot_mods();
     bool has_caps_lock = host_keyboard_led_state().caps_lock;
 #   define HAS_MOD(m) (mods & MOD_BIT(m))
@@ -24,7 +25,7 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
 #           define CAPS_INDICATOR      0
 #           define DM_REC_INDICATOR    33
 
-            hsv_t hsv = { .h = 0, .s = 255, .v = 125 };
+            hsv_t hsv = { .h = 0, .s = 255, .v = 75 };
 #           define HUE_INDICATOR  128 // Blue
 #           define HUE_INDICATOR2 191 // Purple
 #           define HUE_ACTIVE_1   43  // Yellow
@@ -54,9 +55,7 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
                 }
             }
             else if (index == CAPS_INDICATOR) {
-                if (global_state.has_caps_word)
-                    hsv.h = HUE_INDICATOR;
-                else if (has_caps_lock)
+                if (has_caps_lock)
                     hsv.h = HUE_ACTIVE_1;
             }
             else if (index == DM_REC_INDICATOR) {
@@ -72,4 +71,6 @@ void rgb_update(uint8_t led_min, uint8_t led_max) {
             }
         }
     }
+
+#endif
 }

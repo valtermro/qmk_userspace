@@ -30,7 +30,6 @@ enum custom_keycodes {
     C_DELEND,
     C_JOIN,
     C_MNAV,
-    C_USPC,
     C_CTLK,
 
     M_EMAIL1,
@@ -275,24 +274,6 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
 
-        case KC_SPACE: {
-            if (global_state.has_undspc) {
-                if (record->event.pressed) {
-                    SEND_STRING("_");
-                }
-                return false;
-            }
-            return true;
-        }
-
-        case KC_ENTER:
-        case KC_LPRN: {
-            if (record->event.pressed) {
-                global_state.has_undspc = false;
-            }
-            return true;
-        }
-
 #       define CLEAR_PREFIXED_CTL_KEY()             \
             {if (global_state.prefixed_ctl_key) {   \
                 unregister_code(KC_LCTL);           \
@@ -321,13 +302,6 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
         case C_CTLK: {
             if (record->event.pressed) {
                 SEND_PREFIXED_CTL_KEY(X_K, KC_K);
-            }
-            return false;
-        }
-
-        case C_USPC: {
-            if (record->event.pressed) {
-                global_state.has_undspc = !global_state.has_undspc;
             }
             return false;
         }
