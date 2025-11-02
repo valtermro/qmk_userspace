@@ -12,7 +12,8 @@ const uint16_t PROGMEM combo_c3[] = {KC_8, KC_U,     COMBO_END};
 const uint16_t PROGMEM combo_c4[] = {KC_9, KC_Y,     COMBO_END};
 const uint16_t PROGMEM combo_c5[] = {KC_0, KC_GRAVE, COMBO_END};
 
-const uint16_t PROGMEM combo_macro_layer[] = {KC_ENTER, KC_ESC, COMBO_END};
+const uint16_t PROGMEM combo_layer_macr[] = {KC_ENTER, KC_ESC, COMBO_END};
+const uint16_t PROGMEM combo_layer_func[] = {MO(_MOVE), MO(_NUM), COMBO_END};
 
 combo_t key_combos[] = {
     COMBO(combo_g1, LGUI(KC_1)),
@@ -27,7 +28,8 @@ combo_t key_combos[] = {
     COMBO(combo_c4, LCTL(KC_4)),
     COMBO(combo_c5, LCTL(KC_5)),
 
-    COMBO(combo_macro_layer, MO(_MACRO)),
+    COMBO(combo_layer_macr, MO(_MACR)),
+    COMBO(combo_layer_func, MO(_FUNC)),
 };
 
 #endif

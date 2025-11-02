@@ -35,6 +35,8 @@ enum custom_keycodes {
     M_EMAIL1,
     M_EMAIL2,
     M_EMAIL3,
+
+    C_NOP1,
 };
 
 #define HAS_LCTL(a, b) ((a) & MOD_BIT(KC_LCTL) || (b) & MOD_BIT(KC_LCTL))
