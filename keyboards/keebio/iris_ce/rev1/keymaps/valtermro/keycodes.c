@@ -42,120 +42,106 @@ enum custom_keycodes {
 #define HAS_LCTL(a, b) ((a) & MOD_BIT(KC_LCTL) || (b) & MOD_BIT(KC_LCTL))
 #define HAS_LSFT(a, b) ((a) & MOD_BIT(KC_LSFT) || (b) & MOD_BIT(KC_LSFT))
 
-#define CLEAR_MODS(mods, osms) \
-    {if (mods) {               \
-        clear_mods();          \
-    } else if (osms) {         \
-        clear_oneshot_mods();  \
-    }}
-
-#define SET_MODS(mods, osms)    \
-    {if (mods) {                \
-        set_mods(mods);         \
-    } else if (osms) {          \
-        set_oneshot_mods(osms); \
-    }}
-
-#define SEND_ACCENTED(lower, upper)        \
-    {if (get_mods() == MOD_BIT(KC_LSFT)) { \
-        unregister_code(KC_LSFT);          \
-        SEND_STRING(upper);                \
-        register_code(KC_LSFT);            \
-    } else {                               \
-        SEND_STRING(lower);                \
-    }}
-
-#define SEND_SHIFTED(regular, shifted)     \
-    {if (get_mods() == MOD_BIT(KC_LSFT)) { \
-        unregister_code(KC_LSFT);          \
-        SEND_STRING(shifted);              \
-        register_code(KC_LSFT);            \
-    } else {                               \
-        SEND_STRING(regular);              \
-    }}
+#define TAP_ACCENTED(tap_dead, dead_key, char_key)          \
+    {                                                       \
+        uint8_t current_mods = get_mods();                  \
+        uint8_t current_osms = get_oneshot_mods();          \
+        clear_mods();                                       \
+        clear_oneshot_mods();                               \
+        (tap_dead)(dead_key);                               \
+        if (HAS_LSFT(current_mods, current_osms)) {         \
+            register_code(KC_LSFT);                         \
+            tap_code(char_key);                             \
+            unregister_code(KC_LSFT);                       \
+        } else {                                            \
+            tap_code(char_key);                             \
+        }                                                   \
+        set_mods(current_mods);                             \
+        set_oneshot_mods(current_osms);                     \
+    }
 
 bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case A_ACCUTE: {
             if (record->event.pressed) {
-                SEND_ACCENTED("'a", "'A");
+                TAP_ACCENTED(tap_code, KC_QUOTE, KC_A);
             }
             return false;
         }
 
         case E_ACCUTE: {
             if (record->event.pressed) {
-                SEND_ACCENTED("'e", "'E");
+                TAP_ACCENTED(tap_code, KC_QUOTE, KC_E);
             }
             return false;
         }
 
         case I_ACCUTE: {
             if (record->event.pressed) {
-                SEND_ACCENTED("'i", "'I");
+                TAP_ACCENTED(tap_code, KC_QUOTE, KC_I);
             }
             return false;
         }
 
         case O_ACCUTE: {
             if (record->event.pressed) {
-                SEND_ACCENTED("'o", "'O");
+                TAP_ACCENTED(tap_code, KC_QUOTE, KC_O);
             }
             return false;
         }
 
         case U_ACCUTE: {
             if (record->event.pressed) {
-                SEND_ACCENTED("'u", "'U");
+                TAP_ACCENTED(tap_code, KC_QUOTE, KC_U);
             }
             return false;
         }
 
         case A_TILD: {
             if (record->event.pressed) {
-                SEND_ACCENTED("~a", "~A");
+                TAP_ACCENTED(tap_code16, KC_TILDE, KC_A);
             }
             return false;
         }
 
         case O_TILD: {
             if (record->event.pressed) {
-                SEND_ACCENTED("~o", "~O");
+                TAP_ACCENTED(tap_code16, KC_TILDE, KC_O);
             }
             return false;
         }
 
         case C_CEDIL: {
             if (record->event.pressed) {
-                SEND_ACCENTED("'c", "'C");
+                TAP_ACCENTED(tap_code, KC_QUOTE, KC_C);
             }
             return false;
         }
 
         case A_CIRC: {
             if (record->event.pressed) {
-                SEND_ACCENTED("^a", "^A");
+                TAP_ACCENTED(tap_code16, KC_CIRC, KC_A);
             }
             return false;
         }
 
         case E_CIRC: {
             if (record->event.pressed) {
-                SEND_ACCENTED("^e", "^E");
+                TAP_ACCENTED(tap_code16, KC_CIRC, KC_E);
             }
             return false;
         }
 
         case O_CIRC: {
             if (record->event.pressed) {
-                SEND_ACCENTED("^o", "^O");
+                TAP_ACCENTED(tap_code16, KC_CIRC, KC_O);
             }
             return false;
         }
 
         case A_GRAVE: {
             if (record->event.pressed) {
-                SEND_ACCENTED("`a", "`A");
+                TAP_ACCENTED(tap_code, KC_GRAVE, KC_A);
             }
             return false;
         }
@@ -266,9 +252,10 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
                 uint8_t osms = get_oneshot_mods();
 
                 if (HAS_LCTL(mods, osms) || HAS_LSFT(mods, osms)) {
-                    CLEAR_MODS(mods, osms);
+                    clear_mods();
+                    clear_oneshot_mods();
                     SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_MINUS))));
-                    SET_MODS(mods, 0);
+                    set_mods(mods);
                 } else {
                     SEND_STRING(SS_LCTL(SS_TAP(X_MINUS)));
                 }
