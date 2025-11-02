@@ -206,3 +206,17 @@ bool dynamic_macro_record_end_user(int8_t direction) {
 
     return true;
 }
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    switch (get_highest_layer(state)) {
+        case _NUM:
+            if (!host_keyboard_led_state().num_lock) {
+                tap_code(KC_NUM_LOCK);
+            }
+            break;
+        default:
+            break;
+    }
+    return state;
+}
+
