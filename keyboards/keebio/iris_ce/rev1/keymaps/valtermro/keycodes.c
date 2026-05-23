@@ -113,7 +113,7 @@ bool handle_keycode(uint16_t keycode, keyrecord_t *record) {
 
         case C_CEDIL: {
             if (record->event.pressed) {
-                TAP_ACCENTED(tap_code, KC_QUOTE, KC_C);
+                SEND_STRING(SS_RALT(SS_TAP(X_COMMA)));
             }
             return false;
         }
